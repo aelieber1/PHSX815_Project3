@@ -92,7 +92,7 @@ if __name__ == "__main__":
             
             factorial_sum = 0
             for k in exp_data:
-                f = math.log(math.factorial(k))
+                f = math.log(math.factorial(int(k)))
                 factorial_sum += f
             
             # Add bounds - only values that should be considered to be the rate (lambda) 
@@ -101,7 +101,7 @@ if __name__ == "__main__":
             
             """ Find Minimum of Negative Log Liklihood Function """
             min_result = minimize(loglikelihood, x0=3, bounds=rate_bounds)
-            print(" Minimization Routine Result: \n", min_result)
+            #print(" Minimization Routine Result: \n", min_result)
             
             minimum_estimate = min_result.x[0]
             param_estimates.append(minimum_estimate)
@@ -113,26 +113,66 @@ if __name__ == "__main__":
                 datapoints.append(j)
             
         Nmeas_total = Nmeas * Nexp   
-
-    print("Rate Estimates for this Dataset: ", param_estimates)
-    print("Neg LL Calculations for this Dataset: ", neg_logliklihood_estimates)
+    
+    #print("Rate Estimates for this Dataset: ", param_estimates)
+    #print("Neg LL Calculations for this Dataset: ", neg_logliklihood_estimates)
     
     # Plot data to visualize distribution
-    plt.hist(datapoints, bins='auto', density=True, histtype='stepfilled', color='bisque', ec='orange', 
+    plt.hist(datapoints, bins=12,
+             density=True, histtype='stepfilled', color='bisque', ec='orange', 
              alpha=0.75, label="Dataset with "+str(Nmeas)+" measurements per experiment")
     plt.xlabel("Number of Goals Scored")
-    plt.title("Distribution of Dataset Drawn from Poisson Distribution \n Based on the True Rate Parameter")
+    plt.title("Distribution of Dataset Drawn from Poisson Distribution \n Based on the True Rate Parameter " + str(rate))
+    plt.legend()
     plt.grid(True)
     plt.show()
+    
+    # Plot negative log likelih of function versus 
+    plt.scatter(param_estimates, neg_logliklihood_estimates, color='purple')
+    plt.yscale('log')
+    plt.title("Negative LogLikelihood Estimates vs. Estimated Parameters")
+    plt.ylabel("Negative LogLikelihood")
+    plt.xlabel("Estimated Rate Parameter (Lambda)")
+    plt.show()
+    
+    """ Plot Distribution of Lambda Parameter (should peak at true value) """
+    n, bins, patches = plt.hist(param_estimates, bins='auto' , density=True, histtype='bar',color='lightblue', ec='blue',alpha=0.75)
+    plt.xlabel('Estimated Lambda Parameters')
+    plt.title('Distribution of Estimated Lambda Parameters for \n' + 
+              str(Nexp) + ' experiments and ' + str(Nmeas) + ' measurements')
+    plt.axvline(x=rate, color = 'purple', 
+                linewidth = 1.5, label = 'True Rate Parameter ' + str(rate))
+    plt.legend()
+    plt.grid(True)
+    plt.show()
+    
+    """ Calculate uncertainties from Lambda-Histogram Method """
+    # Utilizing the numpy average method - following advice from StackExchange (https://stackoverflow.com/questions/50786699/how-to-calculate-the-standard-deviation-from-a-histogram-python-matplotlib)
+    # Estimated mean from histogram
+    mids = 0.5 * (bins[1:] + bins[:-1])
+    mean = np.average(mids, weights=n)
+    print("Lambda Histogram Estimated Mean: ", mean)
+    
+    # Estimated variance - weighted average of the squared difference from the mean
+    var = np.average((mids - mean)**2, weights=n)
+    print("Lambda Histogram Estimated Variance: ", var)
+    
+    # Standard deviation
+    print("Lambda Histogram Estimated StDev: ", np.sqrt(var))
+    
+    
 
 
-# TODO: Plot the poisson distribution to visualize the data
+# TODO: Plot the poisson distribution to visualize the data - done
 
 # TODO: Plot likelihood function - identify estimated rate (likelihood vs. lambda)
 
 # TODO: Plot or visualize the estimation of the parameter lambda
 
 # TODO: Calculate what the estiamted lambda is & variation from average of the datapoints (analytical answer)
-                            
+    analytical_average = sum(datapoints)/ len(datapoints)
+    print("Analytically derived average: ", analytical_average)
+    
+    
                 
     
