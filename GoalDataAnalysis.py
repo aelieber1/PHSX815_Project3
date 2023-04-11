@@ -49,6 +49,11 @@ if __name__ == "__main__":
     def loglikelihood(l):
         return (-1 * ((math.log(l) * sum_data) - (Nmeas * l) - factorial_sum))
         
+    # Create empty arrays to store estimates of lambda, neg logliklihood, and error 
+    param_estimates = []
+    neg_logliklihood_estimates = []
+    datapoints = []
+        
     """ Estimate the Most Probable Lambda Value for the Dataset """
     need_rate = True
     with open(InputFile) as ifile: 
@@ -72,11 +77,6 @@ if __name__ == "__main__":
                             
         # loop over each experiment
         Nexp = 0
-        
-        # Create empty arrays to store estimates of lambda, neg logliklihood, and error 
-        param_estimates = []
-        neg_logliklihood_estimates = []
-        
         
         for i in data: 
             
@@ -102,17 +102,29 @@ if __name__ == "__main__":
             """ Find Minimum of Negative Log Liklihood Function """
             min_result = minimize(loglikelihood, x0=3, bounds=rate_bounds)
             print(" Minimization Routine Result: \n", min_result)
+            
             minimum_estimate = min_result.x[0]
             param_estimates.append(minimum_estimate)
             
             # Add loglikelihood value to list - to plot later on
             neg_logliklihood_estimates.append(loglikelihood(minimum_estimate))
             
+            for j in i:
+                datapoints.append(j)
             
-        print("Param Estimates: ", param_estimates)
-        print("Neg LL Calculations: ", neg_logliklihood_estimates)
-
         Nmeas_total = Nmeas * Nexp   
+
+    print("Rate Estimates for this Dataset: ", param_estimates)
+    print("Neg LL Calculations for this Dataset: ", neg_logliklihood_estimates)
+    
+    # Plot data to visualize distribution
+    plt.hist(datapoints, bins='auto', density=True, histtype='stepfilled', color='bisque', ec='orange', 
+             alpha=0.75, label="Dataset with "+str(Nmeas)+" measurements per experiment")
+    plt.xlabel("Number of Goals Scored")
+    plt.title("Distribution of Dataset Drawn from Poisson Distribution \n Based on the True Rate Parameter")
+    plt.grid(True)
+    plt.show()
+
 
 # TODO: Plot the poisson distribution to visualize the data
 
