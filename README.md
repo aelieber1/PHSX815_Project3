@@ -1,7 +1,5 @@
 # PHSX815_Project3
 
-# PHSX815 Spring 2023 Project #1 Ashley Lieber
-
 ## Simple Simulation of Soccer Goals Using a Poisson Distribution & Hypothesis Testing
 
 ### This repository contains several programs:
