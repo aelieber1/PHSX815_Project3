@@ -2,6 +2,7 @@
 Goal Data Analysis Code for Project 3
 
 Purpose: 
+    - This code will read in the data generated from a Poisson distribution
     - You'll find several print statements throughout the code below, those are generally used to help
       troubleshoot while writing code, but they are left in the event you need to also troubleshoot 
       the results you get
@@ -16,25 +17,25 @@ Code adapted from these sources:
 import sys
 import math
 import numpy as np
-import seaborn as sns
 import matplotlib.pyplot as plt
-import pandas as pd
 from scipy.stats import poisson
 from scipy.optimize import minimize
+from scipy.special import gammaln
 
 
 # main function for our CookieAnalysis Python code
 if __name__ == "__main__":
    
-    # Read in data file name from commandline prompt
-    haveInput = False
+    """ Read in data file name from commandline prompt """
     
-    # To pass in the data file to be analyzed from the command line
+    # Read in data file as input
+    haveInput = False
     if '-input' in sys.argv:
         p = sys.argv.index('-input')
         InputFile = sys.argv[p+1]
         haveInput = True
     
+    # Print help message if no input is found
     if '-h' in sys.argv or '--help' in sys.argv or not haveInput:
         print ("Usage: %s [options] [input file]" % sys.argv[0])
         print ("  options:")
@@ -117,25 +118,23 @@ if __name__ == "__main__":
     #print("Rate Estimates for this Dataset: ", param_estimates)
     #print("Neg LL Calculations for this Dataset: ", neg_logliklihood_estimates)
     
+    # For the output plot, I'd like it to output at once
+    plt.figure(figsize=(8, 4))
+    
     # Plot data to visualize distribution
+    plt.subplot(2,2,1)
     plt.hist(datapoints, bins=12,
              density=True, histtype='stepfilled', color='bisque', ec='orange', 
-             alpha=0.75, label="Dataset with "+str(Nmeas)+" measurements per experiment")
+             alpha=0.75, label="Dataset with "+str(Nmeas)+" measurements per " 
+             + str(Nexp) + " experiments")
     plt.xlabel("Number of Goals Scored")
     plt.title("Distribution of Dataset Drawn from Poisson Distribution \n Based on the True Rate Parameter " + str(rate))
     plt.legend()
     plt.grid(True)
-    plt.show()
-    
-    # Plot negative log likelih of function versus 
-    plt.scatter(param_estimates, neg_logliklihood_estimates, color='purple')
-    plt.yscale('log')
-    plt.title("Negative LogLikelihood Estimates vs. Estimated Parameters")
-    plt.ylabel("Negative LogLikelihood")
-    plt.xlabel("Estimated Rate Parameter (Lambda)")
-    plt.show()
+    #plt.show()
     
     """ Plot Distribution of Lambda Parameter (should peak at true value) """
+    plt.subplot(2,2,2)
     n, bins, patches = plt.hist(param_estimates, bins='auto' , density=True, histtype='bar',color='lightblue', ec='blue',alpha=0.75)
     plt.xlabel('Estimated Lambda Parameters')
     plt.title('Distribution of Estimated Lambda Parameters for \n' + 
@@ -144,7 +143,7 @@ if __name__ == "__main__":
                 linewidth = 1.5, label = 'True Rate Parameter ' + str(rate))
     plt.legend()
     plt.grid(True)
-    plt.show()
+    #plt.show()
     
     """ Calculate uncertainties from Lambda-Histogram Method """
     # Utilizing the numpy average method - following advice from StackExchange (https://stackoverflow.com/questions/50786699/how-to-calculate-the-standard-deviation-from-a-histogram-python-matplotlib)
@@ -160,18 +159,31 @@ if __name__ == "__main__":
     # Standard deviation
     print("Lambda Histogram Estimated StDev: ", np.sqrt(var))
     
+    """ Calculate uncertainties from LogLikelihood Curve """
+    # Plot negative log likelihood of function versus 
+    nll = np.zeros_like(param_estimates)
+    lambs = np.array(param_estimates)
+    data_arr = np.array(datapoints)
+    # Calculates the LogLiklihood based on the range of estimated lambdas & 
+    for u, lam in enumerate(lambs):
+        nll[u] = -np.sum(data_arr*np.log(lam) - lam - gammaln(data_arr+1))
+    plt.subplot(2,2,3)
+    plt.scatter(param_estimates, nll)
+    plt.xlabel('Lambda Rate Parameter')
+    plt.ylabel('Negative LogLikelihood of Lambda (NLL)')
+    plt.title("Negative LogLikelihood Estimates vs. Estimated Parameters")
+    plt.show()
     
+    # Find the minimum of this Neg Max Liklihood curve
+    lambda_hat = lambs[np.argmin(nll)]
+    print("Maximum likelihood estimate of lambda from Minimum of LogLikelihood Curve:", lambda_hat)
 
 
-# TODO: Plot the poisson distribution to visualize the data - done
-
-# TODO: Plot likelihood function - identify estimated rate (likelihood vs. lambda)
-
-# TODO: Plot or visualize the estimation of the parameter lambda
-
-# TODO: Calculate what the estiamted lambda is & variation from average of the datapoints (analytical answer)
+    """ Analytical Calculate what the estiamted lambda is & variation from average of the datapoints """
     analytical_average = sum(datapoints)/ len(datapoints)
     print("Analytically derived average: ", analytical_average)
+    analystical_stdev = np.sqrt(analytical_average)
+    print("Analytically derived stdev: ", analystical_stdev)
     
     
                 
