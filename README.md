@@ -25,20 +25,19 @@ Of course, using the `GoalDataGeneration.py` [Python], you can generate any data
 The Python code in this repository requires the use of several packages which can be 
 easily installed from the command line using `HomeBrew` or `pip install` commands. 
 
-In order to compile the program `GoalData.py` and `Random.py`, these external 
+In order to compile the program `GoalDataGeneration.py`, these external 
 packages are required:
 - `numpy`
-- `scipy.stats`
-    - `from scipy.stats import poisson`
-- `math`
+- `from scipy.stats import poisson`
 
-In order to compile the programs `GoalDataAnalysis.py` and `MySort.py`, these external 
+In order to compile the programs `GoalDataAnalysis.py`, these external 
 packages are required:
 - `math`
 - `numpy`
-- `matplotlib.pyplot`
-- `pandas`
+- `matplotlib.pyplot as plt`
 - `scipy.stats` import `poisson`
+- `from scipy.optimize import minimize`
+- `from scipy.special import gammaln`
 
 ### Usage
 
