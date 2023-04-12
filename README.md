@@ -1,6 +1,6 @@
 # PHSX815_Project3
 
-## Simple Simulation of Soccer Goals Using a Poisson Distribution & Hypothesis Testing
+## Simple Simulation of Soccer Goals Using a Poisson Distribution & Subsequent Rate Parameter Estimation Analysis 
 
 ### This repository contains several programs:
 
