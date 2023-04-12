@@ -21,7 +21,8 @@ import matplotlib.pyplot as plt
 from scipy.stats import poisson
 from scipy.optimize import minimize
 from scipy.special import gammaln
-
+from tabulate import tabulate
+from prettytable import PrettyTable
 
 # main function for our CookieAnalysis Python code
 if __name__ == "__main__":
@@ -150,14 +151,14 @@ if __name__ == "__main__":
     # Estimated mean from histogram
     mids = 0.5 * (bins[1:] + bins[:-1])
     mean = np.average(mids, weights=n)
-    print("Lambda Histogram Estimated Mean: ", mean)
+    #print("Lambda Histogram Estimated Mean: ", mean)
     
     # Estimated variance - weighted average of the squared difference from the mean
     var = np.average((mids - mean)**2, weights=n)
-    print("Lambda Histogram Estimated Variance: ", var)
+    #print("Lambda Histogram Estimated Variance: ", var)
     
     # Standard deviation
-    print("Lambda Histogram Estimated StDev: ", np.sqrt(var))
+    #print("Lambda Histogram Estimated StDev: ", np.sqrt(var))
     
     """ Calculate uncertainties from LogLikelihood Curve """
     # Plot negative log likelihood of function versus 
@@ -172,18 +173,47 @@ if __name__ == "__main__":
     plt.xlabel('Lambda Rate Parameter')
     plt.ylabel('Negative LogLikelihood of Lambda (NLL)')
     plt.title("Negative LogLikelihood Estimates vs. Estimated Parameters")
+    
+    
+    # Plot Poisson Distribution based off of calculated lambda
+    x = data_arr
+    y = poisson.pmf(x, mu=mean)
+    plt.subplot(2,2,4)
+    plt.scatter(x,y, color='red')
+    plt.axvline(x=rate, color = 'orange', 
+                linewidth = 1.5, label = 'True Rate Parameter ' + str(rate))
+    plt.legend()
+    plt.title('Poisson Distribution based on True Rate Parameter')
     plt.show()
     
     # Find the minimum of this Neg Max Liklihood curve
     lambda_hat = lambs[np.argmin(nll)]
-    print("Maximum likelihood estimate of lambda from Minimum of LogLikelihood Curve:", lambda_hat)
+    #print("Maximum likelihood estimate of lambda from Minimum of LogLikelihood Curve:", lambda_hat)
 
 
     """ Analytical Calculate what the estiamted lambda is & variation from average of the datapoints """
     analytical_average = sum(datapoints)/ len(datapoints)
-    print("Analytically derived average: ", analytical_average)
+    #print("Analytically derived average: ", analytical_average)
     analystical_stdev = np.sqrt(analytical_average)
-    print("Analytically derived stdev: ", analystical_stdev)
+    #print("Analytically derived stdev: ", analystical_stdev)
+    
+    
+    """ Output of Calculated Values in Table """
+    t = PrettyTable(['Description', 'Value'])
+    t.add_row(['True Rate Parameter for Data', rate])
+    t.add_row(['Number of Experiments', Nexp])
+    t.add_row(['Number of Measurments', Nmeas])
+    t.add_row(['----------------------------------- ', '------------------'])                      
+    t.add_row(["Lambda Histogram Estimated Mean: ", mean])
+    t.add_row(["Lambda Histogram Estimated Variance: ", var])
+    t.add_row(["Lambda Histogram Estimated StDev: ", np.sqrt(var)])
+    t.add_row(['----------------------------------- ', '------------------'])   
+    t.add_row(["Minimum of LogLikelihood Curve \n Estimate of Lambda:", lambda_hat])
+    t.add_row(['----------------------------------- ', '------------------'])   
+    t.add_row(["Analytically derived Average: ", analytical_average])
+    t.add_row(["Analytically derived StDev: ", analystical_stdev])
+    print(t)
+    
     
     
                 
