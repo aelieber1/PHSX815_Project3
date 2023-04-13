@@ -203,7 +203,7 @@ if __name__ == "__main__":
     t.add_row(['True Rate Parameter for Data', rate])
     t.add_row(['Number of Experiments', Nexp])
     t.add_row(['Number of Measurments', Nmeas])
-    t.add_row(['----------------------------------- ', '------------------'])                      
+    t.add_row(['----------------------------------- ', '------------------'])                     
     t.add_row(["Lambda Histogram Estimated Mean: ", mean])
     t.add_row(["Lambda Histogram Estimated Variance: ", var])
     t.add_row(["Lambda Histogram Estimated StDev: ", np.sqrt(var)])
@@ -214,7 +214,24 @@ if __name__ == "__main__":
     t.add_row(["Analytically derived StDev: ", analystical_stdev])
     print(t)
     
+    """ Calculate uncertainties from LogLikelihood Curve with Uncertainties """
+    mle = lambda_hat
+    hessian = ([0.5, 0.75], [0.25, 0.55])
+    se = np.sqrt(np.abs(np.diag(np.linalg.inv(hessian))))
+    ci = mle + se + np.array([-1.96, 1.96])
     
     
+    # Plot negative log likelihood of function versus 
+    plt.scatter(param_estimates, nll)
+    plt.axvline(mle, color='black', label='MLE')
+    plt.fill_between(param_estimates, nll, nll + 1.92, alpha=0.2)
+    plt.fill_between(param_estimates, nll, nll + 3.84, alpha=0.2)
+    plt.axhline(nll.min() + 1.92, color='grey', alpha=0.5, label='95% CI (1.92)')
+    plt.axhline(nll.min() + 3.84, color='grey', alpha=0.5, label='95% CI (3.84)')
+    plt.legend()
+    plt.xlabel('$\lambda$ Lambda Rate Parameter')
+    plt.ylabel('Negative LogLikelihood of Lambda (NLL)')
+    plt.title("Negative LogLikelihood Estimates vs. Estimated Parameters")
+    plt.show()
                 
     
