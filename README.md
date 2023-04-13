@@ -8,16 +8,27 @@
 - `GoalDataAnalysis.py` [Python]
 - `Random.py` [Python]
 
-### You will see several TestData files, the instructions below list how to read them.
+### You will see several TestData files, these are the instructions on how to read them:
 
 In order to read what these data files were generated off of, there are three numbers you need. The number of experiments, measurements per experiment, and the true lambda parameter. For the file, `TestData_100_100_4.txt` the numbers follow that same order. The dataset was generated for 100 experiments, 100 measurements for each experiment, and based off of a true rate parameter of 4. Each of the following files found in this repository can be read in a similar manner. 
 
-- `TestData_100_100_4.txt`
-- `TestData_1000_100_4.txt`
-- `TestData_10_100_3.txt`
-- `TestData_10_1000_3.txt`
-- `TestData_10_10000_3.txt`
+- Varying The Number of Measurements
+    - `TestData_1000_10_4.txt`
+    - `TestData_1000_100_4.txt`
+    - `TestData_1000_1000_4.txt`
+    - `TestData_1000_10000_4.txt`
+    
+- Varying the Number of Experiments
+    - `ExpTestData_10_1000_3.txt`
+    - `ExpTestData_100_1000_3.txt`
+    - `ExpTestData_1000_1000_3.txt`
+    - `ExpTestData_10000_1000_3.txt`
 
+- Testing the Behavior with Extreme Rate Values
+    - `TestData_1000_1000_5.txt`
+    - `TestData_1000_1000_50.txt`
+    - `TestData_1000_1000_500.txt`
+    
 Of course, using the `GoalDataGeneration.py` [Python], you can generate any data set you'd like based off of the parameters you'd like! The world is your oyster!
 
 ### Requirements
@@ -53,6 +64,10 @@ With the two datasets on hand from the previous script, the next python file to 
 	<> python3 GoalDataAnalysis.py -input ["filename"]
 
 This script will conduct our analysis of estimating the rate parameter that is most probable based on the dataset using various methods. 
+
+### Plots within the Repository
+
+You will notice several plots within the Plots & Data Folder within the Repository. There are three types of images in this folder. First we have DataPlots, DataTables, and Composites. The Data Plots are the histograms and other plots that output from running the analysis on different data files. The DataTables are the resulting stats for each analysis run. Lastly, the composite images show multiple data tables at once to compare different experiments of varying the number of measurments, number of experiments, and limits of lambda. Beyond that, th enumbers in the file can be read in a similar fashion to the instructions given above on how to read Test Data files. 
 
 ### Other Notes
 
