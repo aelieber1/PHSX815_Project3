@@ -49,6 +49,8 @@ packages are required:
 - `scipy.stats` import `poisson`
 - `from scipy.optimize import minimize`
 - `from scipy.special import gammaln`
+- `from tabulate import tabulate`
+- `from prettytable import PrettyTable`
 
 ### Usage
 
