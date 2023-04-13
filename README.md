@@ -61,15 +61,15 @@ line by typing:
 
 This script will either print the result to the command line or save to a file if given a filename from the command line. See earlier section to understand the datasets present in the repository already. 
 
-With the two datasets on hand from the previous script, the next python file to run is `GoalDataAnalysis.py`  which can be run from the commandline by typing:
+With a dataset on hand from the previous script, the next python file to run is `GoalDataAnalysis.py`  which can be run from the commandline by typing:
 
 	<> python3 GoalDataAnalysis.py -input ["filename"]
 
-This script will conduct our analysis of estimating the rate parameter that is most probable based on the dataset using various methods. 
+This script will conduct our analysis of estimating the rate parameter that is most probable based on the dataset using various methods. It will output one figure with all the plots it generated as well as a table of all the calculated parameters in the command prompt or terminal. 
 
 ### Plots within the Repository
 
-You will notice several plots within the Plots & Data Folder within the Repository. There are three types of images in this folder. First we have DataPlots, DataTables, and Composites. The Data Plots are the histograms and other plots that output from running the analysis on different data files. The DataTables are the resulting stats for each analysis run. Lastly, the composite images show multiple data tables at once to compare different experiments of varying the number of measurments, number of experiments, and limits of lambda. Beyond that, th enumbers in the file can be read in a similar fashion to the instructions given above on how to read Test Data files. 
+You will notice several plots within the Plots & Data Folder within the Repository. There are three types of images in this folder. First we have DataPlots, DataTables, and Composites. The Data Plots are the histograms and other plots that output from running the analysis on different data files. The DataTables are the resulting stats for each analysis run. Lastly, the composite images show multiple data tables at once to compare different experiments of varying the number of measurments, number of experiments, and limits of lambda. Beyond that, the numbers in the file can be read in a similar fashion to the instructions given above on how to read Test Data files. 
 
 ### Other Notes
 
