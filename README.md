@@ -8,6 +8,8 @@
 - `GoalDataAnalysis.py` [Python]
 - `Random.py` [Python]
 
+- I made a few updates to the write up to edit a few things I noticed were wrong! Just wanted to note that here. 
+
 ### You will see several TestData files, these are the instructions on how to read them:
 
 In order to read what these data files were generated off of, there are three numbers you need. The number of experiments, measurements per experiment, and the true lambda parameter. For the file, `TestData_100_100_4.txt` the numbers follow that same order. The dataset was generated for 100 experiments, 100 measurements for each experiment, and based off of a true rate parameter of 4. Each of the following files found in this repository can be read in a similar manner. 
